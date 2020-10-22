@@ -1,26 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Headers from "./components/Header/Headers";
+import Movies from "./components/Movies/Movies";
+import AboutMovies from "./components/Movies/AboutMovies";
+import { Switch, Route, useHistory } from "react-router-dom";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [movieMy, setMovieMy] = useState({});
+
+  const history = useHistory();
+
+  const handleTakeItem = (movie, title) => {
+    setMovieMy(movie);
+    history.push(`/movies/${title}`);
+  };
+
+  const closeHandlerItem = (movie) => {
+    setMovieMy(movie);
+    history.push(`/movies`);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Headers />
+      <Switch>
+        <Route
+          exact
+          path="/movies"
+          render={() => {
+            return <Movies handleTakeItem={handleTakeItem} />;
+          }}
+        />
+        <Route
+          exact
+          path="/movies/:id"
+          render={() => {
+            return (
+              <AboutMovies
+                closeHandlerItem={closeHandlerItem}
+                movieMy={movieMy}
+              />
+            );
+          }}
+        />
+      </Switch>
     </div>
   );
-}
+};
 
 export default App;
